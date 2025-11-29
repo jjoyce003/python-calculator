@@ -20,21 +20,6 @@ on:
       test-result:
         description: 'Test execution result'
         value: ${{ jobs.test.outputs.result }}
-    deploy:
-      name: Deploy to Production
-      needs: [lint, test]
-      runs-on: ubuntu-latest
-      if: |
-        github.ref == 'refs/heads/main' &&
-        github.event_name == 'push' &&
-        success()
-      
-      steps:
-        - name: Simulate deployment
-          run: |
-            echo "Deploying to production..."
-            echo "Environment: Production"
-            echo "Version: ${{ github.sha }}"
 
 jobs:
   test:
@@ -83,20 +68,20 @@ jobs:
           path: .coverage
 
   lint:
-  name: Code Linting
-  runs-on: ubuntu-latest
-  
-  steps:
-    - uses: actions/checkout@v4
+    name: Code Linting
+    runs-on: ubuntu-latest
     
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Install flake8
-      run: pip install flake8
-    
-    - name: Run linter
-      run: flake8 calculator.py test_calculator.py --max-line-length=100
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install flake8
+        run: pip install flake8
+      
+      - name: Run linter
+        run: flake8 calculator.py test_calculator.py --max-line-length=100
             
