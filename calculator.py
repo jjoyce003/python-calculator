@@ -41,4 +41,5 @@ def power(a, b):
     """Return a raised to the power of b."""
     result = a ** b
     if DEBUG:
-        return result
+        print(f"DEBUG: {a} ^ {b} = {result}")
+    return result
