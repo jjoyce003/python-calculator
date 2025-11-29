@@ -1,6 +1,7 @@
 import pytest
 from calculator import add, subtract, multiply, divide, power
 
+# not slow
 def test_add():
     """Test addition function."""
     assert add(2, 3) == 5
@@ -25,13 +26,22 @@ def test_divide():
     assert divide(9, 3) == 3
     assert divide(-10, 2) == -5
 
+@pytest.mark.edge
 def test_divide_by_zero():
     """Test that dividing by zero raises an error."""
     with pytest.raises(ValueError):
         divide(10, 0)
-        
+
+@pytest.mark.edge
 def test_power():
     """Test power function."""
     assert power(2, 3) == 8
     assert power(5, 0) == 1
     assert power(3, 2) == 9
+
+@pytest.mark.slow
+def test_large_number_operations():
+    """Test operations with large numbers."""
+    large_num = 10**10
+    assert add(large_num, large_num) == 2 * large_num
+    assert multiply(large_num, 2) == 2 * large_num

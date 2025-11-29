@@ -1,0 +1,38 @@
+name: Matrix Test Scenarios
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-scenarios:
+    name: Test ${{ matrix.scenario.name }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        scenario:
+          - name: 'basic-operations'
+            marker: 'not slow'
+          - name: 'edge-cases'
+            marker: 'edge'
+          - name: 'performance'
+            marker: 'slow'
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-benchmark
+      
+      - name: Run ${{ matrix.scenario.name }} tests
+        run: pytest -v -m "${{ matrix.scenario.marker }}"
