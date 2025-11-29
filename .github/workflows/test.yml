@@ -1,20 +1,19 @@
-name: Run Tests
+name: Cross-Platform Testing
 
-# This workflow runs when you push code or create a pull request
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
-# Jobs are the work that gets done
 jobs:
   test:
-    name: Test Calculator
-    runs-on: ubuntu-latest
+    name: Test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.9', '3.11', '3.12']
+      fail-fast: false  # Continue running even if one job fails
     
     steps:
       - name: Checkout code
